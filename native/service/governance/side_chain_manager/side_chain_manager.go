@@ -20,6 +20,7 @@ package side_chain_manager
 import (
 	"encoding/hex"
 	"fmt"
+
 	"github.com/btcsuite/btcd/txscript"
 	"github.com/btcsuite/btcutil"
 	"github.com/polynetwork/poly/common"

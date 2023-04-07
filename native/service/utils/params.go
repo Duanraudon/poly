@@ -47,4 +47,5 @@ var (
 	FABRIC_ROUTER     = uint64(7)
 	QUORUM_ROUTER     = uint64(8)
 	ETH_CLIQUE_ROUTER = uint64(9)
+	EOS_ROUTER        = uint64(10)
 )

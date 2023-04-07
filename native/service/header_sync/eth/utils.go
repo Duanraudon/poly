@@ -21,12 +21,12 @@ import (
 	"encoding/binary"
 	"encoding/json"
 	"fmt"
-	"github.com/ethereum/go-ethereum/core/types"
 	"math/big"
 	"time"
 	"unsafe"
 
 	"github.com/ethereum/go-ethereum/common"
+	"github.com/ethereum/go-ethereum/core/types"
 
 	cstates "github.com/polynetwork/poly/core/states"
 	"github.com/polynetwork/poly/native"
@@ -104,6 +104,7 @@ func appendHeader2Main(native *native.NativeService, height uint64, txhash commo
 	scom.NotifyPutHeader(native, chainID, height, txhash.String())
 	return nil
 }
+
 func GetCurrentHeader(native *native.NativeService, chainID uint64) (*types.Header, *big.Int, error) {
 	height, err := GetCurrentHeaderHeight(native, chainID)
 	if err != nil {
@@ -115,6 +116,7 @@ func GetCurrentHeader(native *native.NativeService, chainID uint64) (*types.Head
 	}
 	return header, difficultySum, nil
 }
+
 func GetCurrentHeaderHeight(native *native.NativeService, chainID uint64) (uint64, error) {
 	heightStore, err := native.GetCacheDB().Get(utils.ConcatKey(utils.HeaderSyncContractAddress,
 		[]byte(scom.CURRENT_HEADER_HEIGHT), utils.GetUint64Bytes(chainID)))
@@ -130,6 +132,7 @@ func GetCurrentHeaderHeight(native *native.NativeService, chainID uint64) (uint6
 	}
 	return utils.GetBytesUint64(heightBytes), err
 }
+
 func GetHeaderByHeight(native *native.NativeService, height, chainID uint64) (*types.Header, *big.Int, error) {
 	latestHeight, err := GetCurrentHeaderHeight(native, chainID)
 	if err != nil {
@@ -185,6 +188,7 @@ func IsHeaderExist(native *native.NativeService, hash []byte, chainID uint64) (b
 		return true, nil
 	}
 }
+
 func RestructChain(native *native.NativeService, current, new *types.Header, chainID uint64) error {
 	si, ti := current.Number.Uint64(), new.Number.Uint64()
 	var err error

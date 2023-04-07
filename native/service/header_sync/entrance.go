@@ -20,6 +20,7 @@ package header_sync
 import (
 	"fmt"
 
+	"github.com/polynetwork/poly/native/service/header_sync/eos"
 	"github.com/polynetwork/poly/native/service/header_sync/eth_clique"
 	"github.com/polynetwork/poly/native/service/header_sync/fabric"
 	"github.com/polynetwork/poly/native/service/header_sync/fisco"
@@ -70,6 +71,8 @@ func GetChainHandler(router uint64) (hscommon.HeaderSyncHandler, error) {
 		return fisco.NewFiscoHandler(), nil
 	case utils.FABRIC_ROUTER:
 		return fabric.NewFabricHandler(), nil
+	case utils.EOS_ROUTER:
+		return eos.NewEOSHandler(), nil
 	default:
 		return nil, fmt.Errorf("not a supported router: %d", router)
 	}

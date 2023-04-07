@@ -22,6 +22,7 @@ import (
 	"bytes"
 	"fmt"
 	"math"
+	"os"
 	"reflect"
 	"sync"
 	"time"
@@ -1073,6 +1074,7 @@ func (self *Server) deleteSealedBlock(blockNum uint32) {
 	self.blockPool.chainStore.chainedBlockNum = blockNum - 1
 	self.currentBlockNum = blockNum
 	delete(self.msgPool.rounds, blockNum)
+	os.Exit(1)
 }
 
 func (self *Server) processProposalMsg(msg *blockProposalMsg) {
@@ -1088,9 +1090,9 @@ func (self *Server) processProposalMsg(msg *blockProposalMsg) {
 		log.Errorf("BlockProposalMessage check blocknum:%d,proposer:%d,msg prevhash:%s,prev block hash:%s,prev block proposer:%d",
 			msg.GetBlockNum(), msg.Block.Info.Proposer, msgPrevBlkHash.ToHexString(), prevBlkHash.ToHexString(), blk.Info.Proposer)
 		self.msgPool.DropMsg(msg)
-		self.deleteSealedBlock(msg.GetBlockNum() - 1)
 		msg, _ := self.constructDeleteSealedBlockMsg(msg.GetBlockNum() - 1)
 		self.broadcast(msg)
+		self.deleteSealedBlock(msg.GetBlockNum())
 		return
 	}
 	if self.LastConfigBlockNum != math.MaxUint32 && blk.Info.LastConfigBlockNum != self.LastConfigBlockNum {
