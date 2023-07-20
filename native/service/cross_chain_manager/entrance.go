@@ -20,8 +20,6 @@ import (
 	"encoding/hex"
 	"fmt"
 
-	"github.com/polynetwork/poly/common/log"
-
 	"github.com/polynetwork/poly/native/service/cross_chain_manager/eos"
 	"github.com/polynetwork/poly/native/service/cross_chain_manager/eth_clique"
 	"github.com/polynetwork/poly/native/service/cross_chain_manager/fabric"
