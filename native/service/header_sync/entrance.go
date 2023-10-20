@@ -24,6 +24,7 @@ import (
 	"github.com/polynetwork/poly/native/service/header_sync/eth_clique"
 	"github.com/polynetwork/poly/native/service/header_sync/fabric"
 	"github.com/polynetwork/poly/native/service/header_sync/fisco"
+	"github.com/polynetwork/poly/native/service/header_sync/polygon"
 
 	"github.com/polynetwork/poly/common"
 	"github.com/polynetwork/poly/native"
@@ -44,7 +45,7 @@ const (
 	SYNC_CROSS_CHAIN_MSG = "syncCrossChainMsg"
 )
 
-//Register methods of node_manager contract
+// Register methods of node_manager contract
 func RegisterHeaderSyncContract(native *native.NativeService) {
 	native.Register(SYNC_GENESIS_HEADER, SyncGenesisHeader)
 	native.Register(SYNC_BLOCK_HEADER, SyncBlockHeader)
@@ -73,6 +74,8 @@ func GetChainHandler(router uint64) (hscommon.HeaderSyncHandler, error) {
 		return fabric.NewFabricHandler(), nil
 	case utils.EOS_ROUTER:
 		return eos.NewEOSHandler(), nil
+	case utils.POLYGON_POLYBFT_ROUTER:
+		return polygon.NewETHCliHander(), nil
 	default:
 		return nil, fmt.Errorf("not a supported router: %d", router)
 	}

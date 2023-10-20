@@ -49,6 +49,7 @@ const (
 	SYNC_CROSSCHAIN_MSG         = "syncCrossChainMsg"
 	SYNC_CERT                   = "syncCertificate"
 	LATEST_HEIGHT_IN_PROCESSING = "latestHeightInProcessing"
+	POLYGON_SPAN                = "polygonSpan"
 )
 
 type HeaderSyncHandler interface {
