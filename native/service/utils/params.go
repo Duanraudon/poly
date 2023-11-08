@@ -49,4 +49,5 @@ var (
 	ETH_CLIQUE_ROUTER      = uint64(9)
 	EOS_ROUTER             = uint64(10)
 	POLYGON_POLYBFT_ROUTER = uint64(11)
+	COSMOS_BSN_ROUTER      = uint64(12)
 )
