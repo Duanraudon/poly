@@ -31,6 +31,12 @@ func NewETHHandler() *ETHHandler {
 	return &ETHHandler{}
 }
 
+// MakeDepositProposal
+// @Description: 跨链交易处理函数。。用与验证和转发跨链交易。
+// @receiver this
+// @param service
+// @return *scom.MakeTxParam
+// @return error
 func (this *ETHHandler) MakeDepositProposal(service *native.NativeService) (*scom.MakeTxParam, error) {
 	params := new(scom.EntranceParam)
 	//parse the EntranceParam from native service data

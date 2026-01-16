@@ -19,6 +19,7 @@ package cross_chain_manager
 import (
 	"encoding/hex"
 	"fmt"
+	"github.com/polynetwork/poly/native/service/cross_chain_manager/chainmaker"
 
 	"github.com/polynetwork/poly/native/service/cross_chain_manager/bsncosmos"
 	"github.com/polynetwork/poly/native/service/cross_chain_manager/eos"
@@ -89,6 +90,11 @@ func GetChainHandler(router uint64) (scom.ChainHandler, error) {
 	}
 }
 
+// ImportExTransfer
+// @Description: 这是整个跨链系统的核心入口函数，负责验证和转发跨链交易。
+// @param native
+// @return []byte
+// @return error
 func ImportExTransfer(native *native.NativeService) ([]byte, error) {
 	params := new(scom.EntranceParam)
 	if err := params.Deserialization(common.NewZeroCopySource(native.GetInput())); err != nil {

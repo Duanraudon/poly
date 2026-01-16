@@ -52,6 +52,8 @@ const (
 	POLYGON_SPAN                = "polygonSpan"
 )
 
+// HeaderSyncHandler
+// @Description: 用于验证链的初始化区块头和后续区块头
 type HeaderSyncHandler interface {
 	SyncGenesisHeader(service *native.NativeService) error
 	SyncBlockHeader(service *native.NativeService) error
@@ -305,6 +307,8 @@ func (set *CertTrustChain) ValidCAs(ns *native.NativeService) *CertTrustChain {
 }
 
 func (set *CertTrustChain) CheckSigWithRootCert(root *sm2.Certificate, signed, sig []byte) error {
+	// todo: 当使用Go 1.16以上版本时，SM2签名验证会出现"SM2 verification failure"错误。
+
 	// for i, c := range set.Certs {
 	// 	if err := c.CheckSignatureFrom(root); err != nil {
 	// 		return fmt.Errorf("failed to check sig for No.%d cert from parent: %v", i, err)
