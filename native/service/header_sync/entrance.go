@@ -19,6 +19,7 @@ package header_sync
 
 import (
 	"fmt"
+	"github.com/polynetwork/poly/native/service/header_sync/chainmaker"
 
 	"github.com/polynetwork/poly/native/service/header_sync/bsncosmos"
 	"github.com/polynetwork/poly/native/service/header_sync/eos"
@@ -79,6 +80,8 @@ func GetChainHandler(router uint64) (hscommon.HeaderSyncHandler, error) {
 		return polygon.NewETHCliHander(), nil
 	case utils.COSMOS_BSN_ROUTER:
 		return bsncosmos.NewETHCliHander(), nil
+	case utils.ChainMaker_ROUTER:
+		return chainmaker.NewChainMakerHandler(), nil
 	default:
 		return nil, fmt.Errorf("not a supported router: %d", router)
 	}

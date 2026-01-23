@@ -50,4 +50,5 @@ var (
 	EOS_ROUTER             = uint64(10)
 	POLYGON_POLYBFT_ROUTER = uint64(11)
 	COSMOS_BSN_ROUTER      = uint64(12)
+	ChainMaker_ROUTER      = uint64(13)
 )

@@ -85,6 +85,8 @@ func GetChainHandler(router uint64) (scom.ChainHandler, error) {
 		return polygon.NewETHHandler(), nil
 	case utils.COSMOS_BSN_ROUTER:
 		return bsncosmos.NewETHHandler(), nil
+	case utils.ChainMaker_ROUTER:
+		return chainmaker.NewChainMakerHandler(), nil
 	default:
 		return nil, fmt.Errorf("not a supported router:%d", router)
 	}
