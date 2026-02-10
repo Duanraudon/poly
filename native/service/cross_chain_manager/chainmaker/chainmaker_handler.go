@@ -50,6 +50,10 @@ func (c *ChainMakerHandler) MakeDepositProposal(ns *native.NativeService) (*comm
 		return nil, fmt.Errorf("ChainMaker MakeDepositProposal, check done transaction error: %v", err)
 	}
 
+	if err := common.PutDoneTx(ns, val.CrossChainID, params.SourceChainID); err != nil {
+		return nil, fmt.Errorf("ChainMaker MakeDepositProposal, PutDoneTx error: %v", err)
+	}
+
 	// Get node public keys
 	root, err := chainmaker.GetChainMakerRoot(ns, params.SourceChainID)
 	if err != nil {
@@ -67,10 +71,6 @@ func (c *ChainMakerHandler) MakeDepositProposal(ns *native.NativeService) (*comm
 
 	// Update latest processing height
 	PutChainMakerLatestHeightInProcessing(ns, params.SourceChainID, val.FromContractAddress, params.Height)
-
-	if err = common.PutDoneTx(ns, val.CrossChainID, params.SourceChainID); err != nil {
-		return nil, fmt.Errorf("ChainMaker MakeDepositProposal, PutDoneTx error: %v", err)
-	}
 
 	return val, nil
 }

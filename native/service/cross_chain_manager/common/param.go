@@ -57,10 +57,10 @@ func (this *InitRedeemScriptParam) Deserialization(source *common.ZeroCopySource
 type EntranceParam struct {
 	SourceChainID         uint64 `json:"sourceChainId"`
 	Height                uint32 `json:"height"`
-	Proof                 []byte `json:"proof"`
+	Proof                 []byte `json:"proof"` // 签名数据
 	RelayerAddress        []byte `json:"relayerAddress"`
-	Extra                 []byte `json:"extra"`
-	HeaderOrCrossChainMsg []byte `json:"headerOrCrossChainMsg"`
+	Extra                 []byte `json:"extra"`                 // 明文
+	HeaderOrCrossChainMsg []byte `json:"headerOrCrossChainMsg"` // 证书信息，chainMaker不填
 }
 
 func (this *EntranceParam) Serialization(sink *common.ZeroCopySink) {
@@ -109,7 +109,7 @@ func (this *EntranceParam) Deserialization(source *common.ZeroCopySource) error 
 
 type MakeTxParam struct {
 	TxHash              []byte
-	CrossChainID        []byte
+	CrossChainID        []byte //唯一交易ID
 	FromContractAddress []byte
 	ToChainID           uint64
 	ToContractAddress   []byte
