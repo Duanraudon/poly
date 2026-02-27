@@ -26,7 +26,7 @@ import (
 	"github.com/polynetwork/poly/native"
 	"github.com/polynetwork/poly/native/event"
 	"github.com/polynetwork/poly/native/service/utils"
-	"github.com/tjfoc/gmsm/sm2"
+	"github.com/tjfoc/gmsm/x509"
 )
 
 const (
@@ -239,7 +239,7 @@ func (multi MultiCertTrustChain) ValidateAll(ns *native.NativeService) error {
 }
 
 type CertTrustChain struct {
-	Certs []*sm2.Certificate
+	Certs []*x509.Certificate
 }
 
 func (set *CertTrustChain) Serialization(sink *common.ZeroCopySink) {
@@ -254,13 +254,13 @@ func (set *CertTrustChain) Deserialization(source *common.ZeroCopySource) (err e
 	if eof {
 		return fmt.Errorf("failed to deserialize length")
 	}
-	set.Certs = make([]*sm2.Certificate, l)
+	set.Certs = make([]*x509.Certificate, l)
 	for i := uint16(0); i < l; i++ {
 		raw, eof := source.NextVarBytes()
 		if eof {
 			return fmt.Errorf("failed to get raw bytes for No.%d cert", i)
 		}
-		set.Certs[i], err = sm2.ParseCertificate(raw)
+		set.Certs[i], err = x509.ParseCertificate(raw)
 		if err != nil {
 			return fmt.Errorf("failed to parse cert for No.%d: %v", i, err)
 		}
@@ -288,7 +288,7 @@ func (set *CertTrustChain) Validate(ns *native.NativeService) error {
 
 func (set *CertTrustChain) ValidCAs(ns *native.NativeService) *CertTrustChain {
 	newSet := &CertTrustChain{
-		Certs: make([]*sm2.Certificate, 0),
+		Certs: make([]*x509.Certificate, 0),
 	}
 	now := ns.GetBlockTime()
 	for _, c := range set.Certs {
@@ -306,7 +306,7 @@ func (set *CertTrustChain) ValidCAs(ns *native.NativeService) *CertTrustChain {
 	return newSet
 }
 
-func (set *CertTrustChain) CheckSigWithRootCert(root *sm2.Certificate, signed, sig []byte) error {
+func (set *CertTrustChain) CheckSigWithRootCert(root *x509.Certificate, signed, sig []byte) error {
 	// todo: 当使用Go 1.16以上版本时，SM2签名验证会出现"SM2 verification failure"错误。
 
 	// for i, c := range set.Certs {
