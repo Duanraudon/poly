@@ -33,7 +33,6 @@ import (
 	"github.com/polynetwork/poly/native"
 	"github.com/polynetwork/poly/native/service/cross_chain_manager/btc"
 	scom "github.com/polynetwork/poly/native/service/cross_chain_manager/common"
-	"github.com/polynetwork/poly/native/service/cross_chain_manager/cosmos"
 	"github.com/polynetwork/poly/native/service/cross_chain_manager/eth"
 	"github.com/polynetwork/poly/native/service/cross_chain_manager/neo"
 	"github.com/polynetwork/poly/native/service/cross_chain_manager/ont"
@@ -71,8 +70,8 @@ func GetChainHandler(router uint64) (scom.ChainHandler, error) {
 		return ont.NewONTHandler(), nil
 	case utils.NEO_ROUTER:
 		return neo.NewNEOHandler(), nil
-	case utils.COSMOS_ROUTER:
-		return cosmos.NewCosmosHandler(), nil
+	//case utils.COSMOS_ROUTER:
+	//	return cosmos.NewCosmosHandler(), nil
 	case utils.QUORUM_ROUTER:
 		return quorum.NewQuorumHandler(), nil
 	case utils.FISCO_ROUTER:

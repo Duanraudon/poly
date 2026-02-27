@@ -33,7 +33,6 @@ import (
 	"github.com/polynetwork/poly/native/service/governance/side_chain_manager"
 	"github.com/polynetwork/poly/native/service/header_sync/btc"
 	hscommon "github.com/polynetwork/poly/native/service/header_sync/common"
-	"github.com/polynetwork/poly/native/service/header_sync/cosmos"
 	"github.com/polynetwork/poly/native/service/header_sync/eth"
 	"github.com/polynetwork/poly/native/service/header_sync/neo"
 	"github.com/polynetwork/poly/native/service/header_sync/ont"
@@ -66,8 +65,8 @@ func GetChainHandler(router uint64) (hscommon.HeaderSyncHandler, error) {
 		return ont.NewONTHandler(), nil
 	case utils.NEO_ROUTER:
 		return neo.NewNEOHandler(), nil
-	case utils.COSMOS_ROUTER:
-		return cosmos.NewCosmosHandler(), nil
+	//case utils.COSMOS_ROUTER:
+	//	return cosmos.NewCosmosHandler(), nil
 	case utils.QUORUM_ROUTER:
 		return quorum.NewQuorumHandler(), nil
 	case utils.FISCO_ROUTER:

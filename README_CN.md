@@ -1,7 +1,3 @@
-
-<h1 align="center">Poly</h1>
-<h4 align="center">Version 1.0 </h4>
-
-[![Discord](https://img.shields.io/discord/102860784329052160.svg)](https://discord.gg/y6MuEnq)
-
-[English](README.md) | 中文
+2026.02.27 代码更新说明
+为了兼容chainMaker-relayer项目的引包，直接去掉了cosmos-sdk的引用，
+因为代码版本太老，无法更新使用，直接干脆去掉了

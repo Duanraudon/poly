@@ -5,7 +5,6 @@ go 1.16
 require (
 	github.com/btcsuite/btcd v0.20.1-beta
 	github.com/btcsuite/btcutil v1.0.2
-	github.com/cosmos/cosmos-sdk v0.39.0
 	github.com/ethereum/go-ethereum v1.10.15
 	github.com/gcash/bchd v0.16.5
 	github.com/gcash/bchutil v0.0.0-20200506001747-c2894cd54b33
@@ -22,7 +21,6 @@ require (
 	github.com/qqtou/eos-go v0.10.7
 	github.com/stretchr/testify v1.7.0
 	github.com/syndtr/goleveldb v1.0.1-0.20210819022825-2ae1ddf74ef7
-	github.com/tendermint/tendermint v0.33.6
 	github.com/tjfoc/gmsm v1.4.1
 	github.com/urfave/cli v1.22.4
 	github.com/valyala/bytebufferpool v1.0.0
