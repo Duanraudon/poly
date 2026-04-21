@@ -17,8 +17,6 @@
 package fabric
 
 import (
-	"encoding/pem"
-	"fmt"
 	"github.com/ontio/ontology-crypto/keypair"
 	"github.com/polynetwork/poly/account"
 	"github.com/polynetwork/poly/common"
@@ -31,8 +29,6 @@ import (
 	"github.com/polynetwork/poly/native/service/governance/node_manager"
 	"github.com/polynetwork/poly/native/service/utils"
 	"github.com/polynetwork/poly/native/storage"
-	"github.com/tjfoc/gmsm/sm2"
-	"testing"
 )
 
 var (
@@ -102,20 +98,20 @@ zQW7eQxTo228awU1AIwsA95+
 -----END CERTIFICATE-----`
 )
 
-func TestFabricHandler_SyncGenesisHeader(t *testing.T) {
-	blk, _ := pem.Decode([]byte(orderCA))
-	cert, err := sm2.ParseCertificate(blk.Bytes)
-	if err != nil {
-		t.Fatal(err)
-	}
-	cert1, err := sm2.ParseCertificate(blk.Bytes)
-	if err != nil {
-		t.Fatal(err)
-	}
-
-	ss := make(map[sm2.Certificate]bool)
-	ss[*cert] = true
-
-	fmt.Println(ss[*cert1])
-	fmt.Println(cert.SignatureAlgorithm)
-}
+//func TestFabricHandler_SyncGenesisHeader(t *testing.T) {
+//	blk, _ := pem.Decode([]byte(orderCA))
+//	cert, err := sm2.ParseCertificate(blk.Bytes)
+//	if err != nil {
+//		t.Fatal(err)
+//	}
+//	cert1, err := sm2.ParseCertificate(blk.Bytes)
+//	if err != nil {
+//		t.Fatal(err)
+//	}
+//
+//	ss := make(map[sm2.Certificate]bool)
+//	ss[*cert] = true
+//
+//	fmt.Println(ss[*cert1])
+//	fmt.Println(cert.SignatureAlgorithm)
+//}

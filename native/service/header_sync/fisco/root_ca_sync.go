@@ -24,7 +24,7 @@ import (
 	"github.com/polynetwork/poly/native/service/governance/node_manager"
 	scom "github.com/polynetwork/poly/native/service/header_sync/common"
 	"github.com/polynetwork/poly/native/service/utils"
-	"github.com/tjfoc/gmsm/x509"
+	"github.com/tjfoc/gmsm/sm2"
 )
 
 type FiscoHandler struct{}
@@ -57,7 +57,7 @@ func (this *FiscoHandler) SyncGenesisHeader(ns *native.NativeService) error {
 	if blk.Type != "CERTIFICATE" {
 		return fmt.Errorf("FiscoHandler SyncGenesisHeader, wrong block type: %s", blk.Type)
 	}
-	cert, err := x509.ParseCertificate(blk.Bytes)
+	cert, err := sm2.ParseCertificate(blk.Bytes)
 	if err != nil {
 		return fmt.Errorf("FiscoHandler SyncGenesisHeader, failed to parse certificate: %v", err)
 	}

@@ -34,57 +34,68 @@ func NewFabricHandler() *FabricHandler {
 	return &FabricHandler{}
 }
 
+// MakeDepositProposal
+// @Description:
+// 解析参数并验证侧链配置
+// 检查交易是否已处理，防止重放
+// 获取并清理过期的根证书
+// 验证证书链签名有效性
+// 根据策略(1个/2/3/全部)验证签名数量
+// @receiver this
+// @param ns
+// @return *common.MakeTxParam
+// @return error
 func (this *FabricHandler) MakeDepositProposal(ns *native.NativeService) (*common.MakeTxParam, error) {
 	params := new(common.EntranceParam)
 	if err := params.Deserialization(pcom.NewZeroCopySource(ns.GetInput())); err != nil {
-		return nil, fmt.Errorf("Fabric MakeDepositProposal, contract params deserialize error: %v", err)
+		return nil, fmt.Errorf("Fabric-MakeDepositProposal, contract params deserialize error: %v", err)
 	}
 
 	sideChain, err := side_chain_manager.GetSideChain(ns, params.SourceChainID)
 	if err != nil {
-		return nil, fmt.Errorf("Fabric MakeDepositProposal, side_chain_manager.GetSideChain error: %v", err)
+		return nil, fmt.Errorf("Fabric-MakeDepositProposal, side_chain_manager.GetSideChain error: %v", err)
 	}
 	if sideChain == nil {
-		return nil, errors.New("Fabric MakeDepositProposal, side chain not found")
+		return nil, errors.New("Fabric-MakeDepositProposal, side chain not found")
 	}
 	strategyTy := side_chain_manager.FabricVerifyStrategy(sideChain.BlocksToWait)
 
 	val := &common.MakeTxParam{}
 	if err := val.Deserialization(pcom.NewZeroCopySource(params.Extra)); err != nil {
-		return nil, fmt.Errorf("Fabric MakeDepositProposal, failed to deserialize MakeTxParam: %v", err)
+		return nil, fmt.Errorf("Fabric-MakeDepositProposal, failed to deserialize MakeTxParam: %v", err)
 	}
 	if err := common.CheckDoneTx(ns, val.CrossChainID, params.SourceChainID); err != nil {
-		return nil, fmt.Errorf("Fabric MakeDepositProposal, check done transaction error: %v", err)
+		return nil, fmt.Errorf("Fabric-MakeDepositProposal, check done transaction error: %v", err)
 	}
 	if err := common.PutDoneTx(ns, val.CrossChainID, params.SourceChainID); err != nil {
-		return nil, fmt.Errorf("Fabric MakeDepositProposal, PutDoneTx error: %v", err)
+		return nil, fmt.Errorf("Fabric-MakeDepositProposal, PutDoneTx error: %v", err)
 	}
 	rootCerts, err := fabric.GetFabricRoot(ns, params.SourceChainID)
 	if err != nil {
-		return nil, fmt.Errorf("Fabric MakeDepositProposal, failed to get the Fabric root certs: %v", err)
+		return nil, fmt.Errorf("Fabric-MakeDepositProposal, failed to get the Fabric root certs: %v", err)
 	}
 	l := len(rootCerts.Certs)
 	rootCerts = rootCerts.ValidCAs(ns)
 	validL := len(rootCerts.Certs)
 	if validL == 0 {
-		return nil, fmt.Errorf("Fabric MakeDepositProposal, no valid root CA in poly's storage for Fabric chain %d", params.SourceChainID)
+		return nil, fmt.Errorf("Fabric-MakeDepositProposal, no valid root CA in poly's storage for Fabric chain %d", params.SourceChainID)
 	}
 	if validL < l {
 		if err := fabric.PutFabricRoot(ns, rootCerts, params.SourceChainID); err != nil {
-			return nil, fmt.Errorf("Fabric MakeDepositProposal, failed to put valid fabric root CAs: %v", err)
+			return nil, fmt.Errorf("Fabric-MakeDepositProposal, failed to put valid fabric root CAs: %v", err)
 		}
 	}
 	certs := hcom.MultiCertTrustChain(make([]*hcom.CertTrustChain, 0))
 	if certs, err = certs.Deserialization(pcom.NewZeroCopySource(params.HeaderOrCrossChainMsg)); err != nil {
-		return nil, fmt.Errorf("Fabric MakeDepositProposal, failed to deserialize CertTrustChain: %v", err)
+		return nil, fmt.Errorf("Fabric-MakeDepositProposal, failed to deserialize CertTrustChain: %v", err)
 	}
 	if err := certs.ValidateAll(ns); err != nil {
-		return nil, fmt.Errorf("Fabric MakeDepositProposal, failed to validate CAs: %v", err)
+		return nil, fmt.Errorf("Fabric-MakeDepositProposal, failed to validate CAs: %v", err)
 	}
 
 	sigs := GetSigArr(params.Proof)
 	if len(sigs) != len(certs) {
-		return nil, fmt.Errorf("Fabric MakeDepositProposal, number of siguratures %d is not equal with number of trust chains %d", len(sigs), len(certs))
+		return nil, fmt.Errorf("Fabric-MakeDepositProposal, number of siguratures %d is not equal with number of trust chains %d", len(sigs), len(certs))
 	}
 	isChecked := make(map[string]bool)
 	for i, trustChain := range certs {
@@ -107,7 +118,7 @@ func (this *FabricHandler) MakeDepositProposal(ns *native.NativeService) (*commo
 			continue
 		}*/
 		if err := trustChain.CheckSig(params.Extra, sigs[i]); err != nil {
-			return nil, fmt.Errorf("Fabric MakeDepositProposal, failed to check signature for No.%d chain: %v", i, err)
+			return nil, fmt.Errorf("Fabric-MakeDepositProposal, failed to check signature for No.%d chain: %v", i, err)
 		}
 		isChecked[rawKey] = true
 	}
@@ -115,18 +126,18 @@ func (this *FabricHandler) MakeDepositProposal(ns *native.NativeService) (*commo
 	switch strategyTy {
 	case side_chain_manager.JustOne:
 		if len(isChecked) == 0 {
-			return nil, errors.New("Fabric MakeDepositProposal, at least one valid trust chain commited but none found.")
+			return nil, errors.New("Fabric-MakeDepositProposal: at least one valid trust chain commited but none found")
 		}
 	case side_chain_manager.OverTwoThirds:
 		if 3*len(isChecked) <= 2*len(rootCerts.Certs) {
-			return nil, fmt.Errorf("Fabric MakeDepositProposal, your valid trust chain is not over 2/3 of required and %d valid but %d total.", len(isChecked), len(rootCerts.Certs))
+			return nil, fmt.Errorf("Fabric-MakeDepositProposal: your valid trust chain is not over 2/3 of required and %d valid but %d total", len(isChecked), len(rootCerts.Certs))
 		}
 	case side_chain_manager.AllNeeded:
 		if len(isChecked) != len(rootCerts.Certs) {
-			return nil, fmt.Errorf("Fabric MakeDepositProposal, only %d valid trust chain commited but %d needed.", len(isChecked), len(rootCerts.Certs))
+			return nil, fmt.Errorf("Fabric-MakeDepositProposal: only %d valid trust chain commited but %d needed", len(isChecked), len(rootCerts.Certs))
 		}
 	default:
-		return nil, fmt.Errorf("Fabric MakeDepositProposal, strategy not support: %d", strategyTy)
+		return nil, fmt.Errorf("Fabric-MakeDepositProposal: strategy not support: %d", strategyTy)
 	}
 
 	return val, nil

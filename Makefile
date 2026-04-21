@@ -9,7 +9,7 @@ DRUN=docker run
 DOCKER_NS ?= polynetwork
 DOCKER_TAG=$(ARCH)-$(VERSION)
 
-SRC_FILES = $(shell git ls-files | grep -e .go$ | grep -v _test.go)
+SRC_FILES = $(shell git ls-files *.go | findstr /v _test.go)
 TOOLS=./tools
 ABI=$(TOOLS)/abi
 NATIVE_ABI_SCRIPT=./cmd/abi/native_abi_script
@@ -33,28 +33,29 @@ all: poly tools
 poly-cross: poly-windows poly-linux poly-darwin
 
 poly-windows:
-	CGO_ENABLED=0 GOOS=windows GOARCH=amd64 $(GC) $(BUILD_NODE_PAR) -o poly-windows-amd64.exe main.go
+	set CGO_ENABLED=0& set GOOS=windows& set GOARCH=amd64& $(GC) $(BUILD_NODE_PAR) -o poly-windows-amd64.exe main.go
 
 poly-linux:
-	CGO_ENABLED=0 GOOS=linux GOARCH=amd64 $(GC) $(BUILD_NODE_PAR) -o poly-linux-amd64 main.go
+	@echo "Building poly for Linux..."
+	set CGO_ENABLED=0& set GOOS=linux& set GOARCH=amd64& $(GC) $(BUILD_NODE_PAR) -o poly-linux-amd64 main.go
 
 poly-darwin:
-	CGO_ENABLED=0 GOOS=darwin GOARCH=amd64 $(GC) $(BUILD_NODE_PAR) -o poly-darwin-amd64 main.go
+	set CGO_ENABLED=0& set GOOS=darwin& set GOARCH=amd64& $(GC) $(BUILD_NODE_PAR) -o poly-darwin-amd64 main.go
 
 tools-cross: tools-windows tools-linux tools-darwin
 
 tools-windows: abi 
-	CGO_ENABLED=0 GOOS=windows GOARCH=amd64 $(GC) $(BUILD_NODE_PAR) -o sigsvr-windows-amd64.exe sigsvr.go
+	set CGO_ENABLED=0& set GOOS=windows& set GOARCH=amd64& $(GC) $(BUILD_NODE_PAR) -o sigsvr-windows-amd64.exe sigsvr.go
 	@if [ ! -d $(TOOLS) ];then mkdir -p $(TOOLS) ;fi
 	@mv sigsvr-windows-amd64.exe $(TOOLS)
 
 tools-linux: abi 
-	CGO_ENABLED=0 GOOS=linux GOARCH=amd64 $(GC) $(BUILD_NODE_PAR) -o sigsvr-linux-amd64 sigsvr.go
+	set CGO_ENABLED=0& set GOOS=linux& set GOARCH=amd64& $(GC) $(BUILD_NODE_PAR) -o sigsvr-linux-amd64 sigsvr.go
 	@if [ ! -d $(TOOLS) ];then mkdir -p $(TOOLS) ;fi
 	@mv sigsvr-linux-amd64 $(TOOLS)
 
 tools-darwin: abi 
-	CGO_ENABLED=0 GOOS=darwin GOARCH=amd64 $(GC) $(BUILD_NODE_PAR) -o sigsvr-darwin-amd64 sigsvr.go
+	set CGO_ENABLED=0& set GOOS=darwin& set GOARCH=amd64& $(GC) $(BUILD_NODE_PAR) -o sigsvr-darwin-amd64 sigsvr.go
 	@if [ ! -d $(TOOLS) ];then mkdir -p $(TOOLS) ;fi
 	@mv sigsvr-darwin-amd64 $(TOOLS)
 
@@ -91,6 +92,14 @@ dockerImg: Makefile
 	@$(DBUILD) --no-cache -t $(DOCKER_NS)/poly:$(DOCKER_TAG) - < docker/Dockerfile
 
 clean:
-	rm -rf *.8 *.o *.out *.6 *exe
-	rm -rf poly poly-* tools docker/payload docker/build
+	-if exist *.8 del *.8
+	-if exist *.o del *.o
+	-if exist *.out del *.out
+	-if exist *.6 del *.6
+	-if exist *exe del *exe
+	-if exist poly del poly
+	-if exist poly-* rmdir /s /q poly-*
+	-if exist tools rmdir /s /q tools
+	-if exist docker\payload rmdir /s /q docker\payload
+	-if exist docker\build rmdir /s /q docker\build
 
