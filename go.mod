@@ -1,6 +1,6 @@
 module github.com/polynetwork/poly
 
-go 1.25.0
+go 1.21.0
 
 require (
 	github.com/btcsuite/btcd v0.20.1-beta
@@ -24,8 +24,8 @@ require (
 	github.com/tjfoc/gmsm v1.4.1
 	github.com/urfave/cli v1.22.4
 	github.com/valyala/bytebufferpool v1.0.0
-	golang.org/x/crypto v0.50.0
-	golang.org/x/net v0.52.0
+	golang.org/x/crypto v0.0.0-20210322153248-0c34fe9e7dc2
+	golang.org/x/net v0.0.0-20210805182204-aaa1db679c0d
 	gotest.tools v2.2.0+incompatible
 )
 
@@ -51,7 +51,7 @@ require (
 	github.com/gogo/protobuf v1.3.1 // indirect
 	github.com/golang/groupcache v0.0.0-20191227052852-215e87163ea7 // indirect
 	github.com/golang/snappy v0.0.4 // indirect
-	github.com/google/go-cmp v0.6.0 // indirect
+	github.com/google/go-cmp v0.5.4 // indirect
 	github.com/google/uuid v1.1.5 // indirect
 	github.com/gosuri/uilive v0.0.3 // indirect
 	github.com/holiman/bloomfilter/v2 v2.0.3 // indirect
@@ -83,14 +83,15 @@ require (
 	go.uber.org/tools v0.0.0-20190618225709-2cfd321de3ee // indirect
 	go.uber.org/zap v1.14.0 // indirect
 	golang.org/x/lint v0.0.0-20191125180803-fdd1cda4f05f // indirect
-	golang.org/x/mod v0.34.0 // indirect
-	golang.org/x/sys v0.43.0 // indirect
-	golang.org/x/term v0.42.0 // indirect
-	golang.org/x/text v0.36.0 // indirect
-	golang.org/x/tools/go/expect v0.1.1-deprecated // indirect
+	golang.org/x/mod v0.4.2 // indirect
+	golang.org/x/sys v0.0.0-20220627191245-f75cf1eec38b // indirect
+	golang.org/x/term v0.0.0-20201126162022-7de9c90e9dd1 // indirect
+	golang.org/x/text v0.3.6 // indirect
+	golang.org/x/tools v0.1.0 // indirect
+	golang.org/x/xerrors v0.0.0-20200804184101-5ec99f83aff1 // indirect
 	gopkg.in/natefinch/npipe.v2 v2.0.0-20160621034901-c1b8fa8bdcce // indirect
 	gopkg.in/yaml.v3 v3.0.0-20200313102051-9f266ea9e77c // indirect
 	honnef.co/go/tools v0.1.3 // indirect
 )
 
-replace github.com/tjfoc/gmsm => github.com/Duanraudon/gmsm v0.0.0-20260421055708-069be82a9ade
+replace github.com/tjfoc/gmsm => github.com/chenxifun/gmsm v1.4.0
